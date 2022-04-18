@@ -1,20 +1,46 @@
 % generate the pencil drawing
+% Code: Hao Sun
+% Date: 2022-04-18
+% Generate the pencil drawing image based on the method from
+%   "Combining Sketch and Tone for Pencil Drawing Production" Cewu Lu, Li Xu, Jiaya Jia 
+%   International Symposium on Non-Photorealistic Animation and Rendering (NPAR 2012), June, 2012
+% Reference
+%   "Combining Sketch and Tone for Pencil Drawing Production" Cewu Lu, Li Xu, Jiaya Jia 
+%   International Symposium on Non-Photorealistic Animation and Rendering (NPAR 2012), June, 2012
+% the part of code from this paper
+%% Define the variable
 clc;clear all;
 data_dir = './inputs';
 texture_dir = './pencils';
-out_dir = './test';
-listing = dir(data_dir);
-listing = listing(3:end,:);
-numOfImage = size(listing,1);
+out_dir = './results';
 global isDebug
 global img_list;
 img_list = {};
-% 
-% isDebug = 1;
-% start = 36;
+%% initialization
+% delete the previous output
+del(out_dir)
+% get the image
+listing = dir(data_dir);
+listing = listing(3:end,:);
+numOfImage = size(listing,1);
 
+%% Define the parameters
+dirNum = 8;
+ks = 1;
+strokenDepth = 2;
+backDepth = 1.1;%Trace the pencil background several times
+renderDepth = 1.5;%Trace the generated texture rendering several times
+omega = [50 40 10];
+
+%% Define the pattern
+% debug pattern show the image directly
 isDebug = 0;
 
+isDebug = 1;
+start = 1;
+
+
+%% main process
 if(isDebug == 1)
     final = start;
 else
@@ -24,43 +50,40 @@ end
 
 for i = start:final%numOfImage
     input_image = imread(fullfile(listing(i).folder,listing(i).name));
-    for rand_num = 1:1
+    for rand_num = 7:8  
         fprintf("%d_%d\n",i,rand_num);
         P = im2double(imread(sprintf('%s/pencil_%d.jpg',texture_dir,rand_num)));
-        out_image = PencilDrawing(input_image,P);
+        out_image = PencilDrawing(im, P,dirNum,ks,strokenDepth,backDepth,renderDepth,omega);
         if(isDebug == 1)
             img_list{1} = input_image;
             img_list{6} = out_image;
             figure,montage(img_list, 'Size', [1, 6],'Size',[2 3]);
         end
-
         imwrite(out_image,sprintf("%s/%02d_%02d.jpg",out_dir,i,rand_num),'jpg','Quality',95);
     end
 
 end
 
 
-function I = PencilDrawing(im, P)
+function I = PencilDrawing(im, P,dirNum,ks,strokenDepth,backDepth,renderDepth,omega)
 %   Generate the pencil drawing
 %   "Combining Sketch and Tone for Pencil Drawing Production" Cewu Lu, Li Xu, Jiaya Jia 
 %   International Symposium on Non-Photorealistic Animation and Rendering (NPAR 2012), June, 2012
 %  
 %   Paras:
-%   @im        : the input image.
-%   @P         : the pencil texture.
+%   @im           : the input image.
+%   @P            : the pencil texture.
+%   @dirNum       : the number of directions.
+%   @ks           : the length of convolution line.
+%   @strokenDepth : Trace the stroken several times
+%   @backDepth    : Trace the pencil background several times
+%   @renderDepth  : Trace the generated texture rendering several times
+%   @omega        : Weights for tone map generation 
 %
 
     %% Read the image
     [H, W, sc] = size(im);
     im = im2double(im);
-    %% Define the parameters
-    dirNum = 8;
-    ks = floor(min(H/30, W/30));
-    ks = 1;
-    strokenDepth = 2;
-    backDepth = 0.7;%Trace the pencil background several times
-    renderDepth = 0.7;%Trace the generated texture rendering several times
-    omega = [50 40 10];
     %% Convert from rgb to yuv when nessesary
     if (sc == 3)
         yuvIm = rgb2ycbcr(im);
@@ -277,4 +300,14 @@ function T = GenPencil(im, P, J,renderDepth)
     
     T = P .^ beta;
     T = T .^ renderDepth;
+end
+
+function del(dir_path)
+listing = dir(dir_path);
+listing = listing(3:end,:);
+numOfImage = size(listing,1);
+for i = 1:numOfImage%numOfImage
+    file_path = fullfile(listing(i).folder,listing(i).name)
+    delete(file_path)
+end
 end
