@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="keywords" content="Pencil, Drawing, style transfer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pencil Drawing Using Convolutional Neural Networks</title>
+
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">Pencil Drawing Using Convolutional Neural Networks </h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://github.com/harry-sunhao">Hao Sun</a><sup>1</sup>,</span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Simon Fraser University</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://github.com/harry-sunhao"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Report</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://www.youtube.com/watch?v=MrKrnHhk8IA"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>Video</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/harry-sunhao/CMPT461_Project_PencilDrawing"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://github.com/harry-sunhao/CMPT461_Project_PencilDrawing/releases/tag/V1.0.0"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="far fa-images"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+<div class="container">
+  <div class="columns is-multiline is-centered">
+	<table>
+	  <tr>
+		<td style="padding:0 15px 0 15px;">
+			<img src='data/input_01.jpg' onmouseover="this.src='data/output_01.jpg';" onmouseout="this.src='data/input_01.jpg';"  height="300" width="300" />
+		</td>
+		<td style="padding:0 15px 0 15px;">
+			<img src='data/input_02.jpg' onmouseover="this.src='data/output_02.jpg';" onmouseout="this.src='data/input_02.jpg';"  height="300" width="300" />
+		</td>
+		<td style="padding:0 15px 0 15px;">	
+			<img src='data/input_03.jpg' onmouseover="this.src='data/output_03.jpg';" onmouseout="this.src='data/input_03.jpg';"  height="300" width="300" />
+		
+		</td>		
+	  </tr>
+	  <tr>
+		<td style="padding:0 15px 0 15px;">			  
+			<img src='data/input_04.jpg' onmouseover="this.src='data/output_04.jpg';" onmouseout="this.src='data/input_04.jpg';"  height="300" width="300" />
+		</td>	  
+		<td style="padding:0 15px 0 15px;">
+			<img src='data/input_05.jpg' onmouseover="this.src='data/output_05.jpg';" onmouseout="this.src='data/input_05.jpg';"  height="300" width="300" />
+		</td>
+		<td style="padding:0 15px 0 15px;">
+			<img src='data/input_06.jpg' onmouseover="this.src='data/output_06.jpg';" onmouseout="this.src='data/input_06.jpg';"  height="300" width="300" />
+		</td>
+	  </tr>	  
+	  
+	</table>
+  </div>
+</div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            The traditional pencil drawing algorithm uses a texture background image to simulate the effect of a pencil repeatedly drawing on the paper to produce texture, without taking into account the difference of textures in different areas of the image, and can only generate images of a fixed style. But in real life, artists draw pencil drawings styles are varied. Considering that the convolutional neural network has a good effect on image texture feature extraction, it can simulate inconsistent textures and has a certain similarity with biological vision. I present the method to optimize the single generation result of traditional pencil drawing algorithms based on a Deep Neural Network.
+		</p>
+		<p>
+			It uses the convolutional neural network to extract the features of the artist's hand-drawn pencil drawings and uses the Adam optimization algorithm to optimize the results to obtain the algorithm of the pencil drawing image so that the generated pencil drawing retains the original details and information. It makes more flexibility in the style of the final result image. After generating the texture image, it is combined with traditional algorithms to generate the final results
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video(TBA)</h2>
+        <div class="publication-video">
+          <iframe src="TBA"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+    <!--/ Paper video. -->
+	
+	<div class="columns is-centered has-text-centered">
+		<div class="column is-two-thirds">
+			<h2 class="title is-2">Overall pipeline</h2>
+		</div>
+	</div>  
+		  <img src="./data/training_pipeline.jpg" height="5000" width="2812" >
+	<div class="columns is-centered has-text-centered">
+		<div class="column is-two-thirds">
+			<div class="content has-text-justified">
+				<p>
+					Our approach consists of five steps: 
+					<ol>
+					<li>I generate the Stroke Map and Tone Map by convolution and histgram matching. </li>
+					<li>A convolutional neural network is trained to create the style map. </li>
+					<li>After prediction, I cropped the style map in order to speed the calcuate.</li>
+					<li>After cropped, I blend the pencil texture into the Tone Map to get the Pencil map.</li>
+					<li>After getting the Pencil map, I blend the Stroke map into the Pencil map to get the output image.</li>
+					</ol>
+				</p>
+			</div>
+		</div>
+	</div> 
+
+  </div>
+</section>
+
+
+<footer class="footer">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+Web template is from <a href="https://nerfies.github.io/" style="font-size: 16px; text-decoration: none">here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
