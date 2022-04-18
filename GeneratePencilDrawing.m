@@ -30,7 +30,7 @@ ks = 1;
 strokenDepth = 2;
 backDepth = 1.1;%Trace the pencil background several times
 renderDepth = 1.5;%Trace the generated texture rendering several times
-omega = [50 40 10];
+omega = [25 40 18];
 
 %% Define the pattern
 % debug pattern show the image directly
